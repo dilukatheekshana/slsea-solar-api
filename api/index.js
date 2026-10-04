@@ -18,20 +18,31 @@ if (!cached) {
 }
 
 async function connectToDatabase() {
-  if (cached.conn) {
+  if (cached.conn && mongoose.connection.readyState === 1) {
     return cached.conn;
   }
 
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-    };
-    const mongoUri = process.env.MONGO_URI;
+  if (!cached.promise || mongoose.connection.readyState === 0) {
+    let mongoUri = process.env.MONGO_URI;
     if (!mongoUri) {
+      console.warn('MONGO_URI environment variable is missing.');
       return null;
     }
+    // Auto-fix unencoded '#' in password if present in environment variable
+    if (mongoUri.includes('#') && !mongoUri.includes('%23')) {
+      mongoUri = mongoUri.replace('#', '%23');
+    }
+
+    const opts = {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+    };
+
     cached.promise = mongoose.connect(mongoUri, opts).then((mongooseInstance) => {
       return mongooseInstance;
+    }).catch(err => {
+      cached.promise = null;
+      throw err;
     });
   }
 
@@ -39,7 +50,7 @@ async function connectToDatabase() {
     cached.conn = await cached.promise;
   } catch (e) {
     cached.promise = null;
-    console.error('MongoDB connection error:', e);
+    console.error('MongoDB connection error:', e.message);
   }
 
   return cached.conn;
