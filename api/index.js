@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const app = express();
 const hierarchyRoutes = require('../routes/hierarchy');
+const installationRoutes = require('../routes/installations');
 
 app.use(cors());
 app.use(express.json());
@@ -67,6 +68,9 @@ app.get('/', (req, res) => {
 
 // Hierarchy routes
 app.use('/', hierarchyRoutes);
+
+// Installation routes
+app.use('/', installationRoutes);
 
 // Local listener fallback
 if (process.env.NODE_ENV !== 'production') {
