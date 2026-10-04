@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const { SolarInstallation, GenerationReading } = require('../models');
+const { authorizeJurisdiction } = require('../middleware/auth');
 
 // Reusable helper function to get the latest reading for an installation
 async function getLatestReading(installationId) {
@@ -30,7 +31,7 @@ router.get('/installations', async (req, res) => {
 });
 
 // 2. GET /installations/:id (Composite Resource)
-router.get('/installations/:id', async (req, res) => {
+router.get('/installations/:id', authorizeJurisdiction('installation'), async (req, res) => {
   try {
     const numericId = Number(req.params.id);
     const installation = await SolarInstallation.findOne(
@@ -103,7 +104,7 @@ router.get('/installations/:id/readings/latest', async (req, res) => {
 });
 
 // 4. GET /installations/:id/readings (Historical Analytical Endpoint with Pagination, Filtering, ETag)
-router.get('/installations/:id/readings', async (req, res) => {
+router.get('/installations/:id/readings', authorizeJurisdiction('installation'), async (req, res) => {
   try {
     const numericId = Number(req.params.id);
     const installation = await SolarInstallation.findOne({ id: numericId });

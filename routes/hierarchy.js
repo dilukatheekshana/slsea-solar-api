@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Province, District, GridSubstation, SolarInstallation, GenerationReading } = require('../models');
+const { authorizeJurisdiction } = require('../middleware/auth');
 
 // Standard error helper
 const notFoundError = (message) => ({
@@ -21,7 +22,7 @@ router.get('/provinces', async (req, res) => {
 });
 
 // 2. GET /provinces/:id
-router.get('/provinces/:id', async (req, res) => {
+router.get('/provinces/:id', authorizeJurisdiction('province'), async (req, res) => {
   try {
     const id = Number(req.params.id);
     const province = await Province.findOne({ id }, { _id: 0, __v: 0 });
@@ -35,7 +36,7 @@ router.get('/provinces/:id', async (req, res) => {
 });
 
 // 3. GET /provinces/:id/districts (Scoped sub-collection)
-router.get('/provinces/:id/districts', async (req, res) => {
+router.get('/provinces/:id/districts', authorizeJurisdiction('province'), async (req, res) => {
   try {
     const provinceId = Number(req.params.id);
     const province = await Province.findOne({ id: provinceId });
@@ -60,7 +61,7 @@ router.get('/districts', async (req, res) => {
 });
 
 // 5. GET /districts/:id
-router.get('/districts/:id', async (req, res) => {
+router.get('/districts/:id', authorizeJurisdiction('district'), async (req, res) => {
   try {
     const id = Number(req.params.id);
     const district = await District.findOne({ id }, { _id: 0, __v: 0 });
@@ -74,7 +75,7 @@ router.get('/districts/:id', async (req, res) => {
 });
 
 // 6. GET /districts/:id/substations (Scoped sub-collection)
-router.get('/districts/:id/substations', async (req, res) => {
+router.get('/districts/:id/substations', authorizeJurisdiction('district'), async (req, res) => {
   try {
     const districtId = Number(req.params.id);
     const district = await District.findOne({ id: districtId });
@@ -89,7 +90,7 @@ router.get('/districts/:id/substations', async (req, res) => {
 });
 
 // 7. GET /districts/:id/summary (Upper-band analytical stretch endpoint)
-router.get('/districts/:id/summary', async (req, res) => {
+router.get('/districts/:id/summary', authorizeJurisdiction('district'), async (req, res) => {
   try {
     const districtId = Number(req.params.id);
     const district = await District.findOne({ id: districtId });
@@ -167,7 +168,7 @@ router.get('/districts/:id/summary', async (req, res) => {
 });
 
 // 8. GET /substations/:id/installations (Scoped sub-collection)
-router.get('/substations/:id/installations', async (req, res) => {
+router.get('/substations/:id/installations', authorizeJurisdiction('substation'), async (req, res) => {
   try {
     const substationId = Number(req.params.id);
     const substation = await GridSubstation.findOne({ id: substationId });
