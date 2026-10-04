@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
+const hierarchyRoutes = require('../routes/hierarchy');
 
 app.use(cors());
 app.use(express.json());
@@ -63,6 +64,9 @@ app.get('/', (req, res) => {
     database: isConnected ? 'connected' : 'disconnected'
   });
 });
+
+// Hierarchy routes
+app.use('/', hierarchyRoutes);
 
 // Local listener fallback
 if (process.env.NODE_ENV !== 'production') {
