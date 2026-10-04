@@ -193,4 +193,113 @@ router.get('/installations/:id/readings', async (req, res) => {
   }
 });
 
+// 5. POST /installations/:id/readings (Meter Telemetry Ingestion Write Endpoint)
+router.post('/installations/:id/readings', async (req, res) => {
+  try {
+    // 1. Authentication (Device Ingestion Layer)
+    const apiKey = req.headers['x-api-key'];
+    if (!apiKey) {
+      return res.status(401).json({
+        error: {
+          code: 'MISSING_API_KEY',
+          message: 'X-API-Key header is required for device ingestion'
+        }
+      });
+    }
+
+    // 2. Installation Lookup & Key Verification
+    const numericId = Number(req.params.id);
+    const installation = await SolarInstallation.findOne({ id: numericId }).select('+api_key');
+
+    if (!installation) {
+      return res.status(404).json({
+        error: {
+          code: 'RESOURCE_NOT_FOUND',
+          message: 'Solar installation not found'
+        }
+      });
+    }
+
+    const targetApiKey = installation.api_key || `SLKEY-${String(numericId).padStart(5, '0')}`;
+    if (apiKey !== targetApiKey) {
+      return res.status(403).json({
+        error: {
+          code: 'INVALID_API_KEY',
+          message: 'Provided API key does not match this installation'
+        }
+      });
+    }
+
+    // 3. Payload Validation
+    const { timestamp, power_kw, cumulative_energy_kwh, voltage } = req.body || {};
+
+    if (timestamp === undefined || power_kw === undefined || cumulative_energy_kwh === undefined || voltage === undefined) {
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_FAILED',
+          message: 'Invalid reading payload fields'
+        }
+      });
+    }
+
+    const powerNum = Number(power_kw);
+    const energyNum = Number(cumulative_energy_kwh);
+    const voltNum = Number(voltage);
+
+    if (isNaN(powerNum) || powerNum < 0 ||
+        isNaN(energyNum) || energyNum < 0 ||
+        isNaN(voltNum) || voltNum < 0) {
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_FAILED',
+          message: 'Invalid reading payload fields'
+        }
+      });
+    }
+
+    const dateObj = new Date(timestamp);
+    if (isNaN(dateObj.getTime())) {
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_FAILED',
+          message: 'Invalid reading payload fields'
+        }
+      });
+    }
+
+    // 4. Monotonic ID Assignment & Append Operation
+    const highestReading = await GenerationReading.findOne().sort({ id: -1 }).select('id').lean();
+    const nextId = (highestReading && typeof highestReading.id === 'number') ? highestReading.id + 1 : 1;
+
+    const newReading = new GenerationReading({
+      id: nextId,
+      installation_id: numericId,
+      timestamp: dateObj,
+      power_kw: powerNum,
+      cumulative_energy_kwh: energyNum,
+      voltage: voltNum
+    });
+
+    await newReading.save();
+
+    const createdReading = newReading.toJSON();
+
+    // 5. REST Response Compliance
+    const etag = `"${crypto.createHash('md5').update(JSON.stringify(createdReading)).digest('hex')}"`;
+
+    res.setHeader('Location', `/installations/${numericId}/readings/${nextId}`);
+    res.setHeader('ETag', etag);
+    res.setHeader('Last-Modified', new Date().toUTCString());
+
+    res.status(201).json(createdReading);
+  } catch (error) {
+    res.status(500).json({
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: error.message
+      }
+    });
+  }
+});
+
 module.exports = router;

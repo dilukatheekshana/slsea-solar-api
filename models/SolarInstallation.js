@@ -9,7 +9,13 @@ const solarInstallationSchema = new mongoose.Schema({
   latitude: { type: Number },
   longitude: { type: Number },
   capacity_kw: { type: Number },
-  api_key: { type: String, select: false }
+  api_key: {
+    type: String,
+    select: false,
+    default: function() {
+      return `SLKEY-${String(this.id).padStart(5, '0')}`;
+    }
+  }
 }, {
   toJSON: {
     transform: (doc, ret) => {
