@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../docs/openapi.json');
 
 const app = express();
 const hierarchyRoutes = require('../routes/hierarchy');
@@ -9,6 +11,15 @@ const installationRoutes = require('../routes/installations');
 
 app.use(cors());
 app.use(express.json());
+
+// Swagger UI Options configured for Vercel Serverless (using CDN assets)
+const swaggerUiOptions = {
+  customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui.min.css",
+  customJs: [
+    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-bundle.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.11.0/swagger-ui-standalone-preset.js"
+  ]
+};
 
 // Global connection state caching for serverless environments (Vercel)
 let cached = global.mongoose;
@@ -76,6 +87,10 @@ app.get('/', (req, res) => {
     database: isConnected ? 'connected' : 'disconnected'
   });
 });
+
+// Documentation Endpoints
+app.get('/docs-json', (req, res) => res.json(swaggerDocument));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerUiOptions));
 
 // Hierarchy routes
 app.use('/', hierarchyRoutes);
