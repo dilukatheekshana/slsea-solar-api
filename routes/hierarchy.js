@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Province, District, GridSubstation, SolarInstallation } = require('../models');
+const { Province, District, GridSubstation, SolarInstallation, GenerationReading } = require('../models');
 
 // Standard error helper
 const notFoundError = (message) => ({
@@ -88,7 +88,85 @@ router.get('/districts/:id/substations', async (req, res) => {
   }
 });
 
-// 7. GET /substations/:id/installations (Scoped sub-collection)
+// 7. GET /districts/:id/summary (Upper-band analytical stretch endpoint)
+router.get('/districts/:id/summary', async (req, res) => {
+  try {
+    const districtId = Number(req.params.id);
+    const district = await District.findOne({ id: districtId });
+
+    if (!district) {
+      return res.status(404).json(notFoundError('District not found'));
+    }
+
+    // Find all substations in this district
+    const substations = await GridSubstation.find({ district_id: districtId }, { id: 1 }).lean();
+    const substationIds = substations.map(s => s.id);
+
+    // Find all solar installations under these substations
+    const installations = await SolarInstallation.find({ substation_id: { $in: substationIds } }, { id: 1 }).lean();
+    const installationIds = installations.map(i => i.id);
+    const total_installations = installationIds.length;
+
+    if (total_installations === 0) {
+      return res.status(200).json({
+        district_id: districtId,
+        district_name: district.name,
+        total_installations: 0,
+        current_power_kw: 0,
+        total_energy_kwh: 0,
+        peak_power_kw: 0
+      });
+    }
+
+    // Aggregate latest power & energy per site, and overall peak power
+    const [latestAgg, peakAgg] = await Promise.all([
+      GenerationReading.aggregate([
+        { $match: { installation_id: { $in: installationIds } } },
+        { $sort: { timestamp: -1 } },
+        {
+          $group: {
+            _id: '$installation_id',
+            latestPower: { $first: '$power_kw' },
+            latestEnergy: { $first: '$cumulative_energy_kwh' }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            current_power_kw: { $sum: '$latestPower' },
+            total_energy_kwh: { $sum: '$latestEnergy' }
+          }
+        }
+      ]),
+      GenerationReading.aggregate([
+        { $match: { installation_id: { $in: installationIds } } },
+        {
+          $group: {
+            _id: null,
+            peak_power_kw: { $max: '$power_kw' }
+          }
+        }
+      ])
+    ]);
+
+    const rawCurrentPower = latestAgg[0]?.current_power_kw || 0;
+    const rawTotalEnergy = latestAgg[0]?.total_energy_kwh || 0;
+    const rawPeakPower = peakAgg[0]?.peak_power_kw || 0;
+
+    res.status(200).json({
+      district_id: districtId,
+      district_name: district.name,
+      total_installations,
+      current_power_kw: Number(rawCurrentPower.toFixed(2)),
+      total_energy_kwh: Number(rawTotalEnergy.toFixed(2)),
+      peak_power_kw: Number(rawPeakPower.toFixed(2))
+    });
+  } catch (error) {
+    res.status(500).json({ error: { code: 'INTERNAL_SERVER_ERROR', message: error.message } });
+  }
+});
+
+// 8. GET /substations/:id/installations (Scoped sub-collection)
 router.get('/substations/:id/installations', async (req, res) => {
   try {
     const substationId = Number(req.params.id);
