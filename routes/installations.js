@@ -220,8 +220,7 @@ router.post('/installations/:id/readings', async (req, res) => {
       });
     }
 
-    const targetApiKey = installation.api_key || `SLKEY-${String(numericId).padStart(5, '0')}`;
-    if (apiKey !== targetApiKey) {
+    if (apiKey !== installation.api_key) {
       return res.status(403).json({
         error: {
           code: 'INVALID_API_KEY',

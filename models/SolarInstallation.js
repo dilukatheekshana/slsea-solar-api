@@ -11,10 +11,10 @@ const solarInstallationSchema = new mongoose.Schema({
   capacity_kw: { type: Number },
   api_key: {
     type: String,
-    select: false,
     default: function() {
-      return `SLKEY-${String(this.id).padStart(5, '0')}`;
-    }
+      return `key_inst_${this.id}`;
+    },
+    select: false
   }
 }, {
   toJSON: {
