@@ -142,10 +142,75 @@
             }
           }
         }
+      },
+      "LoginPayload": {
+        "type": "object",
+        "required": ["username", "password"],
+        "properties": {
+          "username": { "type": "string", "example": "national_admin" },
+          "password": { "type": "string", "example": "Admin@123" }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string", "example": "Login successful" },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer", "example": 1 },
+              "username": { "type": "string", "example": "national_admin" },
+              "name": { "type": "string", "example": "National Admin" },
+              "email": { "type": "string", "example": "admin@slsea.gov.lk" },
+              "role": { "type": "string", "example": "national" },
+              "jurisdiction_id": { "type": "integer", "nullable": true, "example": null }
+            }
+          }
+        }
       }
     }
   },
   "paths": {
+    "/auth/login": {
+      "post": {
+        "summary": "User authentication / login",
+        "description": "Authenticate user credentials (username & password) and return user profile details including RBAC role and jurisdiction_id",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginPayload" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LoginResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing username or password",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/provinces": {
       "get": {
         "summary": "List all provinces",

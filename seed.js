@@ -2,7 +2,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
-const { Province, District, GridSubstation, SolarInstallation, GenerationReading } = require('./models');
+const { Province, District, GridSubstation, SolarInstallation, GenerationReading, User } = require('./models');
 
 async function seed() {
   let mongoUri = process.env.MONGO_URI;
@@ -28,6 +28,12 @@ async function seed() {
   console.log('Reading seed.json...');
   const rawData = fs.readFileSync(seedPath, 'utf8');
   const data = JSON.parse(rawData);
+
+  if (data.users && data.users.length > 0) {
+    await User.deleteMany({});
+    await User.insertMany(data.users);
+    console.log(`Seeded ${data.users.length} users.`);
+  }
 
   if (data.provinces && data.provinces.length > 0) {
     await Province.deleteMany({});

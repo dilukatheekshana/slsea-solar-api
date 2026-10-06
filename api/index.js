@@ -6,6 +6,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../docs/openapi.json');
 
 const app = express();
+const authRoutes = require('../routes/auth');
 const hierarchyRoutes = require('../routes/hierarchy');
 const installationRoutes = require('../routes/installations');
 
@@ -91,6 +92,9 @@ app.get('/', (req, res) => {
 // Documentation Endpoints
 app.get('/docs-json', (req, res) => res.json(swaggerDocument));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerUiOptions));
+
+// Auth routes
+app.use('/', authRoutes);
 
 // Hierarchy routes
 app.use('/', hierarchyRoutes);

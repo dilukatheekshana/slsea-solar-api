@@ -19,9 +19,9 @@ async function seedUsers() {
 
   await User.deleteMany({});
   await User.insertMany([
-    { id: 1, username: 'national_admin', role: 'national', jurisdiction_id: null },
-    { id: 2, username: 'provincial_officer', role: 'provincial', jurisdiction_id: 1 },
-    { id: 3, username: 'district_operator', role: 'district', jurisdiction_id: 1 }
+    { id: 1, username: 'national_admin', password: 'Admin@123', name: 'National Admin', email: 'admin@slsea.gov.lk', role: 'national', jurisdiction_id: null },
+    { id: 2, username: 'provincial_officer', password: 'Provincial@123', name: 'Western Province Officer', email: 'western@slsea.gov.lk', role: 'provincial', jurisdiction_id: 1 },
+    { id: 3, username: 'district_operator', password: 'District@123', name: 'Colombo District Operator', email: 'colombo@slsea.gov.lk', role: 'district', jurisdiction_id: 1 }
   ]);
 
   const users = await User.find({});
