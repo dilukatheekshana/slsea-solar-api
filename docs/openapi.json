@@ -218,6 +218,7 @@
       "get": {
         "summary": "List all provinces",
         "description": "Query all provinces from MongoDB",
+        "security": [{ "UserAuth": [] }],
         "responses": {
           "200": {
             "description": "Bare array of all provinces",
@@ -304,6 +305,7 @@
       "get": {
         "summary": "List all districts",
         "description": "Query all districts from MongoDB",
+        "security": [{ "UserAuth": [] }],
         "responses": {
           "200": {
             "description": "Bare array of all districts",
@@ -437,6 +439,7 @@
       "get": {
         "summary": "List all installations",
         "description": "Query all solar installations from MongoDB (api_key excluded)",
+        "security": [{ "UserAuth": [] }],
         "responses": {
           "200": {
             "description": "Array of all solar installations",
@@ -483,6 +486,7 @@
       "get": {
         "summary": "Get latest generation reading",
         "description": "Derived operational real-time view returning the most recent reading",
+        "security": [{ "UserAuth": [] }],
         "parameters": [
           {
             "name": "id",
