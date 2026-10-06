@@ -3,25 +3,45 @@ const { User, Province, District, GridSubstation, SolarInstallation } = require(
 function authorizeJurisdiction(resourceType) {
   return async (req, res, next) => {
     try {
-      const userId = req.headers['x-user-id'];
+      let rawToken = req.headers['x-user-id'] || req.headers['x-user-id'.toLowerCase()];
 
-      // Require authentication header
-      if (!userId) {
+      // Check Authorization header (e.g. Bearer 1 or Bearer national_admin)
+      const authHeader = req.headers['authorization'] || req.headers['authorization'.toLowerCase()];
+      if (!rawToken && authHeader) {
+        if (authHeader.startsWith('Bearer ')) {
+          rawToken = authHeader.substring(7).trim();
+        } else {
+          rawToken = authHeader.trim();
+        }
+      }
+
+      // Check Query Parameter fallback (e.g. ?user_id=1 or ?username=national_admin)
+      if (!rawToken && req.query) {
+        rawToken = req.query.user_id || req.query.userId || req.query.username;
+      }
+
+      // Require authentication
+      if (!rawToken) {
         return res.status(401).json({
           error: {
             code: 'UNAUTHORIZED',
-            message: 'Authentication required. Missing X-User-ID header.'
+            message: 'Authentication required. Please provide X-User-ID or Authorization: Bearer header.'
           }
         });
       }
 
-      // Identify user
-      const user = await User.findOne({ id: Number(userId) });
+      // Identify user by numeric id OR string username
+      const numericId = Number(rawToken);
+      const userQuery = !isNaN(numericId)
+        ? { $or: [{ id: numericId }, { username: String(rawToken) }] }
+        : { username: String(rawToken) };
+
+      const user = await User.findOne(userQuery);
       if (!user) {
         return res.status(401).json({
           error: {
             code: 'UNAUTHORIZED',
-            message: 'Invalid user identification'
+            message: `Invalid user identification: '${rawToken}'`
           }
         });
       }

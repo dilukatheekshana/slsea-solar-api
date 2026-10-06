@@ -15,6 +15,10 @@
       "description": "Local Development Server"
     }
   ],
+  "security": [
+    { "UserAuth": [] },
+    { "BearerAuth": [] }
+  ],
   "components": {
     "securitySchemes": {
       "ApiKeyAuth": {
@@ -27,7 +31,12 @@
         "type": "apiKey",
         "in": "header",
         "name": "X-User-Id",
-        "description": "User ID for RBAC: 1 (National), 2 (Provincial - WP), 3 (District - Colombo)"
+        "description": "User ID or Username for RBAC: 1 / national_admin, 2 / provincial_officer, 3 / district_operator"
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Bearer token (User ID or Username)"
       }
     },
     "schemas": {
