@@ -16,27 +16,21 @@
     }
   ],
   "security": [
-    { "UserAuth": [] },
-    { "BearerAuth": [] }
+    { "UserAuth": [] }
   ],
   "components": {
     "securitySchemes": {
-      "ApiKeyAuth": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-API-Key",
-        "description": "API Key for meter telemetry device ingestion"
-      },
       "UserAuth": {
         "type": "apiKey",
         "in": "header",
         "name": "X-User-Id",
         "description": "User ID or Username for RBAC: 1 / national_admin, 2 / provincial_officer, 3 / district_operator"
       },
-      "BearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "description": "Bearer token (User ID or Username)"
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key",
+        "description": "API Key for meter telemetry device ingestion (e.g. key_inst_1)"
       }
     },
     "schemas": {
