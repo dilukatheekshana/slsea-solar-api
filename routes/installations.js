@@ -16,7 +16,7 @@ async function getLatestReading(installationId) {
 }
 
 // 1. GET /installations
-router.get('/installations', async (req, res) => {
+router.get('/installations', authorizeJurisdiction('installation'), async (req, res) => {
   try {
     const installations = await SolarInstallation.find({}, { _id: 0, __v: 0, api_key: 0 }).lean();
     res.status(200).json(installations);
@@ -67,7 +67,7 @@ router.get('/installations/:id', authorizeJurisdiction('installation'), async (r
 });
 
 // 3. GET /installations/:id/readings/latest (Derived Operational View)
-router.get('/installations/:id/readings/latest', async (req, res) => {
+router.get('/installations/:id/readings/latest', authorizeJurisdiction('installation'), async (req, res) => {
   try {
     const numericId = Number(req.params.id);
     const installation = await SolarInstallation.findOne({ id: numericId });

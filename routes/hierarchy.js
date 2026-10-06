@@ -12,7 +12,7 @@ const notFoundError = (message) => ({
 });
 
 // 1. GET /provinces
-router.get('/provinces', async (req, res) => {
+router.get('/provinces', authorizeJurisdiction('province'), async (req, res) => {
   try {
     const provinces = await Province.find({}, { _id: 0, __v: 0 });
     res.status(200).json(provinces);
@@ -51,7 +51,7 @@ router.get('/provinces/:id/districts', authorizeJurisdiction('province'), async 
 });
 
 // 4. GET /districts
-router.get('/districts', async (req, res) => {
+router.get('/districts', authorizeJurisdiction('district'), async (req, res) => {
   try {
     const districts = await District.find({}, { _id: 0, __v: 0 });
     res.status(200).json(districts);

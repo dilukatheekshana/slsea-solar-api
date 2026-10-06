@@ -5,9 +5,14 @@ function authorizeJurisdiction(resourceType) {
     try {
       const userId = req.headers['x-user-id'];
 
-      // Unauthenticated requests pass through
+      // Require authentication header
       if (!userId) {
-        return next();
+        return res.status(401).json({
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'Authentication required. Missing X-User-ID header.'
+          }
+        });
       }
 
       // Identify user
@@ -23,6 +28,19 @@ function authorizeJurisdiction(resourceType) {
 
       // 1. National role has unrestricted access
       if (user.role === 'national') {
+        return next();
+      }
+
+      // If endpoint doesn't target a specific resource ID (e.g. GET /provinces, GET /districts, GET /installations)
+      if (!req.params.id) {
+        if (user.role === 'district' && resourceType === 'province') {
+          return res.status(403).json({
+            error: {
+              code: 'FORBIDDEN',
+              message: 'Access denied: resource outside district jurisdiction'
+            }
+          });
+        }
         return next();
       }
 
