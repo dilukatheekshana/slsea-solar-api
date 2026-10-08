@@ -104,7 +104,7 @@ router.get('/districts/:id/summary', authorizeJurisdiction('district'), async (r
     const substationIds = substations.map(s => s.id);
 
     // Find all solar installations under these substations
-    const installations = await SolarInstallation.find({ substation_id: { $in: substationIds } }, { id: 1 }).lean();
+    const installations = await SolarInstallation.find({ substation_id: { $in: substationIds }, is_deleted: { $ne: true } }, { id: 1 }).lean();
     const installationIds = installations.map(i => i.id);
     const total_installations = installationIds.length;
 
@@ -175,7 +175,7 @@ router.get('/substations/:id/installations', authorizeJurisdiction('substation')
     if (!substation) {
       return res.status(404).json(notFoundError('Substation not found'));
     }
-    const installations = await SolarInstallation.find({ substation_id: substationId }, { _id: 0, __v: 0, api_key: 0 });
+    const installations = await SolarInstallation.find({ substation_id: substationId, is_deleted: { $ne: true } }, { _id: 0, __v: 0, api_key: 0 });
     res.status(200).json(installations);
   } catch (error) {
     res.status(500).json({ error: { code: 'INTERNAL_SERVER_ERROR', message: error.message } });

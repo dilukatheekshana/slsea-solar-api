@@ -480,6 +480,82 @@
           "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
           "404": { "description": "Solar installation not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
         }
+      },
+      "put": {
+        "summary": "Update solar installation",
+        "description": "Update details of an existing solar installation",
+        "security": [{ "UserAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "meter_id": { "type": "string" },
+                  "inverter_id": { "type": "string" },
+                  "substation_id": { "type": "integer" },
+                  "latitude": { "type": "number" },
+                  "longitude": { "type": "number" },
+                  "capacity_kw": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated installation object",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SolarInstallation" }
+              }
+            }
+          },
+          "400": { "description": "Validation failed", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "404": { "description": "Solar installation not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      },
+      "delete": {
+        "summary": "Soft delete solar installation",
+        "description": "Soft delete a solar installation record",
+        "security": [{ "UserAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Installation soft deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Solar installation deleted successfully" },
+                    "id": { "type": "integer", "example": 1 }
+                  }
+                }
+              }
+            }
+          },
+          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
+          "404": { "description": "Solar installation not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
       }
     },
     "/installations/{id}/readings/latest": {

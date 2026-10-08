@@ -93,6 +93,8 @@ slsea-solar-api/
 - `substation_id` (Number, Required): Foreign Key $\rightarrow$ `GridSubstation`.
 - `latitude` (Number), `longitude` (Number): GPS coordinates.
 - `capacity_kw` (Number): System capacity in kW.
+- `is_deleted` (Boolean, Default: `false`): Soft delete status flag.
+- `deleted_at` (Date, Default: `null`): Soft delete timestamp.
 - `api_key` (String, `select: false`, Default: `key_inst_${this.id}`): Secret device ingestion key.
 
 ### 6. `GenerationReading` (Telemetry Timeseries)
@@ -118,9 +120,11 @@ slsea-solar-api/
 | **GET** | `/districts/:id` | Get district details by ID | Auth Required + RBAC |
 | **GET** | `/districts/:id/substations` | List grid substations under a district | Auth Required + RBAC |
 | **GET** | `/districts/:id/summary` | Analytical summary (current power, total energy, peak power) | Auth Required + RBAC |
-| **GET** | `/substations/:id/installations` | List solar installations under a substation | Auth Required + RBAC |
-| **GET** | `/installations` | List all solar installations (api_key omitted) | Auth Required (`X-User-ID` / Bearer) |
+| **GET** | `/substations/:id/installations` | List active solar installations under a substation | Auth Required + RBAC |
+| **GET** | `/installations` | List all active solar installations (api_key omitted) | Auth Required (`X-User-ID` / Bearer) |
 | **GET** | `/installations/:id` | Composite resource (installation details + `last_reading`) | Auth Required + RBAC |
+| **PUT** | `/installations/:id` | Update solar installation details | Auth Required + RBAC |
+| **DELETE** | `/installations/:id` | Soft delete solar installation record | Auth Required + RBAC |
 | **GET** | `/installations/:id/readings/latest` | Derived real-time view (single latest reading) | Auth Required + RBAC |
 | **GET** | `/installations/:id/readings` | Historical analytical view (date filter, pagination, ETag) | Auth Required + RBAC (`If-None-Match`) |
 | **POST** | `/installations/:id/readings` | Meter telemetry write ingestion (returns 201 Created) | Device Auth (`X-API-Key`) |

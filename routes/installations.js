@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
-const { SolarInstallation, GenerationReading } = require('../models');
+const { SolarInstallation, GenerationReading, GridSubstation } = require('../models');
 const { authorizeJurisdiction } = require('../middleware/auth');
 
 // Reusable helper function to get the latest reading for an installation
@@ -18,7 +18,10 @@ async function getLatestReading(installationId) {
 // 1. GET /installations
 router.get('/installations', authorizeJurisdiction('installation'), async (req, res) => {
   try {
-    const installations = await SolarInstallation.find({}, { _id: 0, __v: 0, api_key: 0 }).lean();
+    const installations = await SolarInstallation.find(
+      { is_deleted: { $ne: true } },
+      { _id: 0, __v: 0, api_key: 0 }
+    ).lean();
     res.status(200).json(installations);
   } catch (error) {
     res.status(500).json({
@@ -35,7 +38,7 @@ router.get('/installations/:id', authorizeJurisdiction('installation'), async (r
   try {
     const numericId = Number(req.params.id);
     const installation = await SolarInstallation.findOne(
-      { id: numericId },
+      { id: numericId, is_deleted: { $ne: true } },
       { _id: 0, __v: 0, api_key: 0 }
     ).lean();
 
@@ -70,7 +73,7 @@ router.get('/installations/:id', authorizeJurisdiction('installation'), async (r
 router.get('/installations/:id/readings/latest', authorizeJurisdiction('installation'), async (req, res) => {
   try {
     const numericId = Number(req.params.id);
-    const installation = await SolarInstallation.findOne({ id: numericId });
+    const installation = await SolarInstallation.findOne({ id: numericId, is_deleted: { $ne: true } });
 
     if (!installation) {
       return res.status(404).json({
@@ -107,7 +110,7 @@ router.get('/installations/:id/readings/latest', authorizeJurisdiction('installa
 router.get('/installations/:id/readings', authorizeJurisdiction('installation'), async (req, res) => {
   try {
     const numericId = Number(req.params.id);
-    const installation = await SolarInstallation.findOne({ id: numericId });
+    const installation = await SolarInstallation.findOne({ id: numericId, is_deleted: { $ne: true } });
 
     if (!installation) {
       return res.status(404).json({
@@ -210,7 +213,7 @@ router.post('/installations/:id/readings', async (req, res) => {
 
     // 2. Installation Lookup & Key Verification
     const numericId = Number(req.params.id);
-    const installation = await SolarInstallation.findOne({ id: numericId }).select('+api_key');
+    const installation = await SolarInstallation.findOne({ id: numericId, is_deleted: { $ne: true } }).select('+api_key');
 
     if (!installation) {
       return res.status(404).json({
@@ -292,6 +295,90 @@ router.post('/installations/:id/readings', async (req, res) => {
     res.setHeader('Last-Modified', new Date().toUTCString());
 
     res.status(201).json(createdReading);
+  } catch (error) {
+    res.status(500).json({
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: error.message
+      }
+    });
+  }
+});
+
+// 6. PUT /installations/:id (Update Solar Installation)
+router.put('/installations/:id', authorizeJurisdiction('installation'), async (req, res) => {
+  try {
+    const numericId = Number(req.params.id);
+    const installation = await SolarInstallation.findOne({ id: numericId, is_deleted: { $ne: true } });
+
+    if (!installation) {
+      return res.status(404).json({
+        error: {
+          code: 'RESOURCE_NOT_FOUND',
+          message: 'Solar installation not found'
+        }
+      });
+    }
+
+    const { name, meter_id, inverter_id, substation_id, latitude, longitude, capacity_kw } = req.body || {};
+
+    // Validate substation existence if updating substation_id
+    if (substation_id !== undefined) {
+      const targetSubstation = await GridSubstation.findOne({ id: Number(substation_id) });
+      if (!targetSubstation) {
+        return res.status(400).json({
+          error: {
+            code: 'VALIDATION_FAILED',
+            message: `Grid substation with id ${substation_id} does not exist`
+          }
+        });
+      }
+      installation.substation_id = Number(substation_id);
+    }
+
+    if (name !== undefined) installation.name = String(name);
+    if (meter_id !== undefined) installation.meter_id = String(meter_id);
+    if (inverter_id !== undefined) installation.inverter_id = String(inverter_id);
+    if (latitude !== undefined) installation.latitude = Number(latitude);
+    if (longitude !== undefined) installation.longitude = Number(longitude);
+    if (capacity_kw !== undefined) installation.capacity_kw = Number(capacity_kw);
+
+    await installation.save();
+
+    res.status(200).json(installation);
+  } catch (error) {
+    res.status(500).json({
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: error.message
+      }
+    });
+  }
+});
+
+// 7. DELETE /installations/:id (Soft Delete Solar Installation)
+router.delete('/installations/:id', authorizeJurisdiction('installation'), async (req, res) => {
+  try {
+    const numericId = Number(req.params.id);
+    const installation = await SolarInstallation.findOne({ id: numericId, is_deleted: { $ne: true } });
+
+    if (!installation) {
+      return res.status(404).json({
+        error: {
+          code: 'RESOURCE_NOT_FOUND',
+          message: 'Solar installation not found'
+        }
+      });
+    }
+
+    installation.is_deleted = true;
+    installation.deleted_at = new Date();
+    await installation.save();
+
+    res.status(200).json({
+      message: 'Solar installation deleted successfully',
+      id: numericId
+    });
   } catch (error) {
     res.status(500).json({
       error: {

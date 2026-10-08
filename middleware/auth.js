@@ -103,7 +103,7 @@ function authorizeJurisdiction(resourceType) {
             }
           }
         } else if (resourceType === 'installation') {
-          const installation = await SolarInstallation.findOne({ id: targetId });
+          const installation = await SolarInstallation.findOne({ id: targetId, is_deleted: { $ne: true } });
           if (installation) {
             const substation = await GridSubstation.findOne({ id: installation.substation_id });
             if (substation) {
@@ -154,7 +154,7 @@ function authorizeJurisdiction(resourceType) {
             });
           }
         } else if (resourceType === 'installation') {
-          const installation = await SolarInstallation.findOne({ id: targetId });
+          const installation = await SolarInstallation.findOne({ id: targetId, is_deleted: { $ne: true } });
           if (installation) {
             const substation = await GridSubstation.findOne({ id: installation.substation_id });
             if (substation && substation.district_id !== user.jurisdiction_id) {

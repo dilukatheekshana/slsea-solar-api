@@ -9,6 +9,8 @@ const solarInstallationSchema = new mongoose.Schema({
   latitude: { type: Number },
   longitude: { type: Number },
   capacity_kw: { type: Number },
+  is_deleted: { type: Boolean, default: false },
+  deleted_at: { type: Date, default: null },
   api_key: {
     type: String,
     default: function() {
@@ -22,6 +24,8 @@ const solarInstallationSchema = new mongoose.Schema({
       delete ret._id;
       delete ret.__v;
       delete ret.api_key;
+      delete ret.is_deleted;
+      delete ret.deleted_at;
       return ret;
     }
   }
