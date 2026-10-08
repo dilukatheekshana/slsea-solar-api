@@ -389,4 +389,155 @@ router.delete('/installations/:id', authorizeJurisdiction('installation'), async
   }
 });
 
+// 8. GET /readings (List all generation readings across installations with pagination, date filtering, and ETag)
+router.get('/readings', authorizeJurisdiction('reading'), async (req, res) => {
+  try {
+    // Only include readings belonging to active (non-soft-deleted) installations
+    const activeInstallations = await SolarInstallation.find({ is_deleted: { $ne: true } }, { id: 1 }).lean();
+    const activeInstallationIds = activeInstallations.map(i => i.id);
+
+    const filter = { installation_id: { $in: activeInstallationIds } };
+
+    if (req.query.installation_id) {
+      filter.installation_id = Number(req.query.installation_id);
+    }
+
+    const { from, to } = req.query;
+    if (from || to) {
+      filter.timestamp = {};
+      if (from) filter.timestamp.$gte = new Date(from);
+      if (to) filter.timestamp.$lte = new Date(to);
+    }
+
+    const sortField = req.query.sort || 'timestamp';
+    const order = (req.query.order || 'desc').toLowerCase();
+    const sortObj = { [sortField]: order === 'asc' ? 1 : -1 };
+
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    let limit = parseInt(req.query.limit, 10) || 50;
+    if (limit > 100) limit = 100;
+    if (limit < 1) limit = 50;
+
+    const totalCount = await GenerationReading.countDocuments(filter);
+    const totalPages = Math.ceil(totalCount / limit);
+
+    const readings = await GenerationReading.find(filter, { _id: 0, __v: 0 })
+      .sort(sortObj)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean();
+
+    const baseUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}${req.path}`;
+    function getPageUrl(targetPage) {
+      const queryParams = new URLSearchParams(req.query);
+      queryParams.set('page', targetPage);
+      queryParams.set('limit', limit);
+      return `${baseUrl}?${queryParams.toString()}`;
+    }
+
+    const nextUrl = (page < totalPages && totalCount > 0) ? getPageUrl(page + 1) : null;
+    const prevUrl = (page > 1 && totalPages > 0) ? getPageUrl(page - 1) : null;
+
+    const payload = {
+      count: totalCount,
+      next: nextUrl,
+      previous: prevUrl,
+      data: readings
+    };
+
+    const etag = `"${crypto.createHash('md5').update(JSON.stringify(payload)).digest('hex')}"`;
+    const ifNoneMatch = req.headers['if-none-match'];
+
+    if (ifNoneMatch && ifNoneMatch === etag) {
+      res.setHeader('ETag', etag);
+      return res.status(304).end();
+    }
+
+    res.setHeader('ETag', etag);
+    res.setHeader('Cache-Control', 'public, max-age=60');
+    res.status(200).json(payload);
+  } catch (error) {
+    res.status(500).json({
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: error.message
+      }
+    });
+  }
+});
+
+// 9. GET /readings/:id (Get single generation reading by numeric ID)
+router.get('/readings/:id', authorizeJurisdiction('reading'), async (req, res) => {
+  try {
+    const readingId = Number(req.params.id);
+    const reading = await GenerationReading.findOne({ id: readingId }, { _id: 0, __v: 0 }).lean();
+
+    if (!reading) {
+      return res.status(404).json({
+        error: {
+          code: 'RESOURCE_NOT_FOUND',
+          message: 'Generation reading not found'
+        }
+      });
+    }
+
+    // Verify target installation is not soft deleted
+    const installation = await SolarInstallation.findOne({ id: reading.installation_id, is_deleted: { $ne: true } });
+    if (!installation) {
+      return res.status(404).json({
+        error: {
+          code: 'RESOURCE_NOT_FOUND',
+          message: 'Generation reading not found'
+        }
+      });
+    }
+
+    res.status(200).json(reading);
+  } catch (error) {
+    res.status(500).json({
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: error.message
+      }
+    });
+  }
+});
+
+// 10. GET /installations/:id/readings/:readingId (Get specific reading under an installation)
+router.get('/installations/:id/readings/:readingId', authorizeJurisdiction('installation'), async (req, res) => {
+  try {
+    const numericId = Number(req.params.id);
+    const readingId = Number(req.params.readingId);
+
+    const installation = await SolarInstallation.findOne({ id: numericId, is_deleted: { $ne: true } });
+    if (!installation) {
+      return res.status(404).json({
+        error: {
+          code: 'RESOURCE_NOT_FOUND',
+          message: 'Solar installation not found'
+        }
+      });
+    }
+
+    const reading = await GenerationReading.findOne({ id: readingId, installation_id: numericId }, { _id: 0, __v: 0 }).lean();
+    if (!reading) {
+      return res.status(404).json({
+        error: {
+          code: 'RESOURCE_NOT_FOUND',
+          message: 'Generation reading not found for this installation'
+        }
+      });
+    }
+
+    res.status(200).json(reading);
+  } catch (error) {
+    res.status(500).json({
+      error: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: error.message
+      }
+    });
+  }
+});
+
 module.exports = router;

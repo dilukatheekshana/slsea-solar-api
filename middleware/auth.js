@@ -1,4 +1,4 @@
-const { User, Province, District, GridSubstation, SolarInstallation } = require('../models');
+const { User, Province, District, GridSubstation, SolarInstallation, GenerationReading } = require('../models');
 
 function authorizeJurisdiction(resourceType) {
   return async (req, res, next) => {
@@ -118,6 +118,25 @@ function authorizeJurisdiction(resourceType) {
               }
             }
           }
+        } else if (resourceType === 'reading') {
+          const reading = await GenerationReading.findOne({ id: targetId });
+          if (reading) {
+            const installation = await SolarInstallation.findOne({ id: reading.installation_id, is_deleted: { $ne: true } });
+            if (installation) {
+              const substation = await GridSubstation.findOne({ id: installation.substation_id });
+              if (substation) {
+                const district = await District.findOne({ id: substation.district_id });
+                if (district && district.province_id !== user.jurisdiction_id) {
+                  return res.status(403).json({
+                    error: {
+                      code: 'FORBIDDEN',
+                      message: forbiddenMsg
+                    }
+                  });
+                }
+              }
+            }
+          }
         }
         return next();
       }
@@ -164,6 +183,22 @@ function authorizeJurisdiction(resourceType) {
                   message: forbiddenMsg
                 }
               });
+            }
+          }
+        } else if (resourceType === 'reading') {
+          const reading = await GenerationReading.findOne({ id: targetId });
+          if (reading) {
+            const installation = await SolarInstallation.findOne({ id: reading.installation_id, is_deleted: { $ne: true } });
+            if (installation) {
+              const substation = await GridSubstation.findOne({ id: installation.substation_id });
+              if (substation && substation.district_id !== user.jurisdiction_id) {
+                return res.status(403).json({
+                  error: {
+                    code: 'FORBIDDEN',
+                    message: forbiddenMsg
+                  }
+                });
+              }
             }
           }
         }

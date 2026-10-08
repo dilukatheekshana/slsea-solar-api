@@ -707,7 +707,7 @@
           }
         },
         "tags": [
-          "Districts"
+          "Substations"
         ]
       }
     },
@@ -1353,6 +1353,350 @@
           },
           "404": {
             "description": "Solar installation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Telemetry Readings"
+        ]
+      }
+    },
+    "/substations": {
+      "get": {
+        "summary": "List all grid substations",
+        "description": "Query all grid substations across Sri Lanka from MongoDB",
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bare array of all grid substations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GridSubstation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Substations"
+        ]
+      }
+    },
+    "/substations/{id}": {
+      "get": {
+        "summary": "Get grid substation by ID",
+        "description": "Find a grid substation where id matches numeric ID parameter",
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Grid substation object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GridSubstation"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Substation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Substations"
+        ]
+      }
+    },
+    "/readings": {
+      "get": {
+        "summary": "Get generation readings across all installations",
+        "description": "Paginated list of historical telemetry readings across all active solar installations with optional date range and installation filters",
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "installation_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Optional installation ID filter"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Start ISO date-time filter"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "End ISO date-time filter"
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "timestamp"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            }
+          },
+          {
+            "name": "If-None-Match",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ETag header for conditional GET"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated envelope response",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReadingsHistoryEnvelope"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not Modified (ETag matched)",
+            "headers": {
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Telemetry Readings"
+        ]
+      }
+    },
+    "/readings/{id}": {
+      "get": {
+        "summary": "Get a single generation reading by ID",
+        "description": "Fetch a specific telemetry reading by its unique numeric ID",
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bare generation reading object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationReading"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Generation reading not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Telemetry Readings"
+        ]
+      }
+    },
+    "/installations/{id}/readings/{readingId}": {
+      "get": {
+        "summary": "Get a specific reading under a solar installation",
+        "description": "Fetch a specific reading by reading ID scoped to an installation ID",
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "readingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bare generation reading object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationReading"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Solar installation or reading not found",
             "content": {
               "application/json": {
                 "schema": {

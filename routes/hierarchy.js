@@ -167,7 +167,31 @@ router.get('/districts/:id/summary', authorizeJurisdiction('district'), async (r
   }
 });
 
-// 8. GET /substations/:id/installations (Scoped sub-collection)
+// 8. GET /substations (List all grid substations)
+router.get('/substations', authorizeJurisdiction('substation'), async (req, res) => {
+  try {
+    const substations = await GridSubstation.find({}, { _id: 0, __v: 0 });
+    res.status(200).json(substations);
+  } catch (error) {
+    res.status(500).json({ error: { code: 'INTERNAL_SERVER_ERROR', message: error.message } });
+  }
+});
+
+// 9. GET /substations/:id (Get single grid substation)
+router.get('/substations/:id', authorizeJurisdiction('substation'), async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const substation = await GridSubstation.findOne({ id }, { _id: 0, __v: 0 });
+    if (!substation) {
+      return res.status(404).json(notFoundError('Substation not found'));
+    }
+    res.status(200).json(substation);
+  } catch (error) {
+    res.status(500).json({ error: { code: 'INTERNAL_SERVER_ERROR', message: error.message } });
+  }
+});
+
+// 10. GET /substations/:id/installations (Scoped sub-collection)
 router.get('/substations/:id/installations', authorizeJurisdiction('substation'), async (req, res) => {
   try {
     const substationId = Number(req.params.id);
