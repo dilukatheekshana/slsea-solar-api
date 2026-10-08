@@ -16,7 +16,9 @@
     }
   ],
   "security": [
-    { "UserAuth": [] }
+    {
+      "UserAuth": []
+    }
   ],
   "components": {
     "securitySchemes": {
@@ -37,64 +39,164 @@
       "Province": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "example": 1 },
-          "name": { "type": "string", "example": "Western Province" },
-          "code": { "type": "string", "example": "WP" }
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Western Province"
+          },
+          "code": {
+            "type": "string",
+            "example": "WP"
+          }
         }
       },
       "District": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "example": 1 },
-          "name": { "type": "string", "example": "Colombo" },
-          "code": { "type": "string", "example": "CM" },
-          "province_id": { "type": "integer", "example": 1 }
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Colombo"
+          },
+          "code": {
+            "type": "string",
+            "example": "CM"
+          },
+          "province_id": {
+            "type": "integer",
+            "example": 1
+          }
         }
       },
       "GridSubstation": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "example": 1 },
-          "name": { "type": "string", "example": "Colombo Central Grid Substation" },
-          "capacity_mva": { "type": "number", "example": 100 },
-          "district_id": { "type": "integer", "example": 1 }
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Colombo Central Grid Substation"
+          },
+          "capacity_mva": {
+            "type": "number",
+            "example": 100
+          },
+          "district_id": {
+            "type": "integer",
+            "example": 1
+          }
         }
       },
       "SolarInstallation": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "example": 1 },
-          "name": { "type": "string", "example": "Solar Installation 001" },
-          "meter_id": { "type": "string", "example": "SLMTR-00001" },
-          "inverter_id": { "type": "string", "example": "INV-00001" },
-          "substation_id": { "type": "integer", "example": 1 },
-          "latitude": { "type": "number", "example": 6.939648 },
-          "longitude": { "type": "number", "example": 79.818451 },
-          "capacity_kw": { "type": "number", "example": 8.0 }
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Solar Installation 001"
+          },
+          "meter_id": {
+            "type": "string",
+            "example": "SLMTR-00001"
+          },
+          "inverter_id": {
+            "type": "string",
+            "example": "INV-00001"
+          },
+          "substation_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "latitude": {
+            "type": "number",
+            "example": 6.939648
+          },
+          "longitude": {
+            "type": "number",
+            "example": 79.818451
+          },
+          "capacity_kw": {
+            "type": "number",
+            "example": 8
+          }
         }
       },
       "GenerationReading": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "example": 672 },
-          "installation_id": { "type": "integer", "example": 1 },
-          "timestamp": { "type": "string", "format": "date-time", "example": "2026-09-26T23:45:00.000Z" },
-          "power_kw": { "type": "number", "example": 4.5 },
-          "cumulative_energy_kwh": { "type": "number", "example": 388.601 },
-          "voltage": { "type": "number", "example": 226.0 }
+          "id": {
+            "type": "integer",
+            "example": 672
+          },
+          "installation_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-09-26T23:45:00.000Z"
+          },
+          "power_kw": {
+            "type": "number",
+            "example": 4.5
+          },
+          "cumulative_energy_kwh": {
+            "type": "number",
+            "example": 388.601
+          },
+          "voltage": {
+            "type": "number",
+            "example": 226
+          }
         }
       },
       "CompositeInstallation": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "example": 1 },
-          "name": { "type": "string", "example": "Solar Installation 001" },
-          "meter_id": { "type": "string", "example": "SLMTR-00001" },
-          "inverter_id": { "type": "string", "example": "INV-00001" },
-          "substation_id": { "type": "integer", "example": 1 },
-          "latitude": { "type": "number", "example": 6.939648 },
-          "longitude": { "type": "number", "example": 79.818451 },
-          "capacity_kw": { "type": "number", "example": 8.0 },
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Solar Installation 001"
+          },
+          "meter_id": {
+            "type": "string",
+            "example": "SLMTR-00001"
+          },
+          "inverter_id": {
+            "type": "string",
+            "example": "INV-00001"
+          },
+          "substation_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "latitude": {
+            "type": "number",
+            "example": 6.939648
+          },
+          "longitude": {
+            "type": "number",
+            "example": 79.818451
+          },
+          "capacity_kw": {
+            "type": "number",
+            "example": 8
+          },
           "last_reading": {
             "$ref": "#/components/schemas/GenerationReading",
             "nullable": true
@@ -104,34 +206,83 @@
       "DistrictSummary": {
         "type": "object",
         "properties": {
-          "district_id": { "type": "integer", "example": 1 },
-          "district_name": { "type": "string", "example": "Colombo" },
-          "total_installations": { "type": "integer", "example": 10 },
-          "current_power_kw": { "type": "number", "example": 0 },
-          "total_energy_kwh": { "type": "number", "example": 4034.84 },
-          "peak_power_kw": { "type": "number", "example": 13.61 }
+          "district_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "district_name": {
+            "type": "string",
+            "example": "Colombo"
+          },
+          "total_installations": {
+            "type": "integer",
+            "example": 10
+          },
+          "current_power_kw": {
+            "type": "number",
+            "example": 0
+          },
+          "total_energy_kwh": {
+            "type": "number",
+            "example": 4034.84
+          },
+          "peak_power_kw": {
+            "type": "number",
+            "example": 13.61
+          }
         }
       },
       "ReadingsHistoryEnvelope": {
         "type": "object",
         "properties": {
-          "count": { "type": "integer", "example": 672 },
-          "next": { "type": "string", "nullable": true, "example": "http://localhost:3000/installations/1/readings?page=2&limit=50" },
-          "previous": { "type": "string", "nullable": true, "example": null },
+          "count": {
+            "type": "integer",
+            "example": 672
+          },
+          "next": {
+            "type": "string",
+            "nullable": true,
+            "example": "http://localhost:3000/installations/1/readings?page=2&limit=50"
+          },
+          "previous": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          },
           "data": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/GenerationReading" }
+            "items": {
+              "$ref": "#/components/schemas/GenerationReading"
+            }
           }
         }
       },
       "CreateReadingPayload": {
         "type": "object",
-        "required": ["timestamp", "power_kw", "cumulative_energy_kwh", "voltage"],
+        "required": [
+          "timestamp",
+          "power_kw",
+          "cumulative_energy_kwh",
+          "voltage"
+        ],
         "properties": {
-          "timestamp": { "type": "string", "format": "date-time", "example": "2026-10-05T02:30:00Z" },
-          "power_kw": { "type": "number", "example": 4.5 },
-          "cumulative_energy_kwh": { "type": "number", "example": 395.2 },
-          "voltage": { "type": "number", "example": 231.4 }
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-10-05T02:30:00Z"
+          },
+          "power_kw": {
+            "type": "number",
+            "example": 4.5
+          },
+          "cumulative_energy_kwh": {
+            "type": "number",
+            "example": 395.2
+          },
+          "voltage": {
+            "type": "number",
+            "example": 231.4
+          }
         }
       },
       "ErrorResponse": {
@@ -140,33 +291,70 @@
           "error": {
             "type": "object",
             "properties": {
-              "code": { "type": "string", "example": "RESOURCE_NOT_FOUND" },
-              "message": { "type": "string", "example": "Province not found" }
+              "code": {
+                "type": "string",
+                "example": "RESOURCE_NOT_FOUND"
+              },
+              "message": {
+                "type": "string",
+                "example": "Province not found"
+              }
             }
           }
         }
       },
       "LoginPayload": {
         "type": "object",
-        "required": ["username", "password"],
+        "required": [
+          "username",
+          "password"
+        ],
         "properties": {
-          "username": { "type": "string", "example": "national_admin" },
-          "password": { "type": "string", "example": "Admin@123" }
+          "username": {
+            "type": "string",
+            "example": "national_admin"
+          },
+          "password": {
+            "type": "string",
+            "example": "Admin@123"
+          }
         }
       },
       "LoginResponse": {
         "type": "object",
         "properties": {
-          "message": { "type": "string", "example": "Login successful" },
+          "message": {
+            "type": "string",
+            "example": "Login successful"
+          },
           "user": {
             "type": "object",
             "properties": {
-              "id": { "type": "integer", "example": 1 },
-              "username": { "type": "string", "example": "national_admin" },
-              "name": { "type": "string", "example": "National Admin" },
-              "email": { "type": "string", "example": "admin@slsea.gov.lk" },
-              "role": { "type": "string", "example": "national" },
-              "jurisdiction_id": { "type": "integer", "nullable": true, "example": null }
+              "id": {
+                "type": "integer",
+                "example": 1
+              },
+              "username": {
+                "type": "string",
+                "example": "national_admin"
+              },
+              "name": {
+                "type": "string",
+                "example": "National Admin"
+              },
+              "email": {
+                "type": "string",
+                "example": "admin@slsea.gov.lk"
+              },
+              "role": {
+                "type": "string",
+                "example": "national"
+              },
+              "jurisdiction_id": {
+                "type": "integer",
+                "nullable": true,
+                "example": null
+              }
             }
           }
         }
@@ -182,7 +370,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/LoginPayload" }
+              "schema": {
+                "$ref": "#/components/schemas/LoginPayload"
+              }
             }
           }
         },
@@ -191,7 +381,9 @@
             "description": "Login successful",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/LoginResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
               }
             }
           },
@@ -199,7 +391,9 @@
             "description": "Missing username or password",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -207,18 +401,27 @@
             "description": "Invalid credentials",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Authentication"
+        ]
       }
     },
     "/provinces": {
       "get": {
         "summary": "List all provinces",
         "description": "Query all provinces from MongoDB",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Bare array of all provinces",
@@ -226,25 +429,36 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/Province" }
+                  "items": {
+                    "$ref": "#/components/schemas/Province"
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Provinces"
+        ]
       }
     },
     "/provinces/{id}": {
       "get": {
         "summary": "Get province by ID",
         "description": "Find a province where id matches numeric ID parameter",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -252,36 +466,65 @@
             "description": "Province object",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Province" }
+                "schema": {
+                  "$ref": "#/components/schemas/Province"
+                }
               }
             }
           },
           "401": {
             "description": "Invalid user identification",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "403": {
             "description": "Access denied: resource outside jurisdiction",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
           "404": {
             "description": "Province not found",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
-        }
+        },
+        "tags": [
+          "Provinces"
+        ]
       }
     },
     "/provinces/{id}/districts": {
       "get": {
         "summary": "List districts in province",
         "description": "Query all districts where province_id matches numeric ID",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -291,21 +534,48 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/District" }
+                  "items": {
+                    "$ref": "#/components/schemas/District"
+                  }
                 }
               }
             }
           },
-          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "Province not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Province not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Provinces"
+        ]
       }
     },
     "/districts": {
       "get": {
         "summary": "List all districts",
         "description": "Query all districts from MongoDB",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Bare array of all districts",
@@ -313,25 +583,36 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/District" }
+                  "items": {
+                    "$ref": "#/components/schemas/District"
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Districts"
+        ]
       }
     },
     "/districts/{id}": {
       "get": {
         "summary": "Get district by ID",
         "description": "Find a district where id matches numeric ID parameter",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -339,26 +620,55 @@
             "description": "District object",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/District" }
+                "schema": {
+                  "$ref": "#/components/schemas/District"
+                }
               }
             }
           },
-          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "District not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "District not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Districts"
+        ]
       }
     },
     "/districts/{id}/substations": {
       "get": {
         "summary": "List substations in district",
         "description": "Query grid substations where district_id matches numeric ID",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -368,27 +678,56 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/GridSubstation" }
+                  "items": {
+                    "$ref": "#/components/schemas/GridSubstation"
+                  }
                 }
               }
             }
           },
-          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "District not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "District not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Districts"
+        ]
       }
     },
     "/districts/{id}/summary": {
       "get": {
         "summary": "Get district analytical summary",
         "description": "Upper-band analytical stretch endpoint aggregating current power, total energy, and peak power for a district",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -396,26 +735,55 @@
             "description": "District analytical summary metrics",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/DistrictSummary" }
+                "schema": {
+                  "$ref": "#/components/schemas/DistrictSummary"
+                }
               }
             }
           },
-          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "District not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "District not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Districts"
+        ]
       }
     },
     "/substations/{id}/installations": {
       "get": {
         "summary": "List installations in substation",
         "description": "Query solar installations where substation_id matches numeric ID",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -425,21 +793,48 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/SolarInstallation" }
+                  "items": {
+                    "$ref": "#/components/schemas/SolarInstallation"
+                  }
                 }
               }
             }
           },
-          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "Substation not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Substation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Substations"
+        ]
       }
     },
     "/installations": {
       "get": {
         "summary": "List all installations",
         "description": "Query all solar installations from MongoDB (api_key excluded)",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Array of all solar installations",
@@ -447,25 +842,36 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/SolarInstallation" }
+                  "items": {
+                    "$ref": "#/components/schemas/SolarInstallation"
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "tags": [
+          "Solar Installations"
+        ]
       }
     },
     "/installations/{id}": {
       "get": {
         "summary": "Get composite installation details",
         "description": "Composite resource embedding installation fields plus single latest reading",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -473,24 +879,53 @@
             "description": "Composite installation object with last_reading",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/CompositeInstallation" }
+                "schema": {
+                  "$ref": "#/components/schemas/CompositeInstallation"
+                }
               }
             }
           },
-          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "Solar installation not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Solar installation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Solar Installations"
+        ]
       },
       "put": {
         "summary": "Update solar installation",
         "description": "Update details of an existing solar installation",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "requestBody": {
@@ -500,13 +935,27 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "name": { "type": "string" },
-                  "meter_id": { "type": "string" },
-                  "inverter_id": { "type": "string" },
-                  "substation_id": { "type": "integer" },
-                  "latitude": { "type": "number" },
-                  "longitude": { "type": "number" },
-                  "capacity_kw": { "type": "number" }
+                  "name": {
+                    "type": "string"
+                  },
+                  "meter_id": {
+                    "type": "string"
+                  },
+                  "inverter_id": {
+                    "type": "string"
+                  },
+                  "substation_id": {
+                    "type": "integer"
+                  },
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "type": "number"
+                  },
+                  "capacity_kw": {
+                    "type": "number"
+                  }
                 }
               }
             }
@@ -517,25 +966,63 @@
             "description": "Updated installation object",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SolarInstallation" }
+                "schema": {
+                  "$ref": "#/components/schemas/SolarInstallation"
+                }
               }
             }
           },
-          "400": { "description": "Validation failed", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "Solar installation not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Solar installation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Solar Installations"
+        ]
       },
       "delete": {
         "summary": "Soft delete solar installation",
         "description": "Soft delete a solar installation record",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -546,29 +1033,62 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": { "type": "string", "example": "Solar installation deleted successfully" },
-                    "id": { "type": "integer", "example": 1 }
+                    "message": {
+                      "type": "string",
+                      "example": "Solar installation deleted successfully"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    }
                   }
                 }
               }
             }
           },
-          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "Solar installation not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Solar installation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Solar Installations"
+        ]
       }
     },
     "/installations/{id}/readings/latest": {
       "get": {
         "summary": "Get latest generation reading",
         "description": "Derived operational real-time view returning the most recent reading",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -576,69 +1096,114 @@
             "description": "Bare latest generation reading object",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/GenerationReading" }
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationReading"
+                }
               }
             }
           },
-          "404": { "description": "Solar installation or readings not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "404": {
+            "description": "Solar installation or readings not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Telemetry Readings"
+        ]
       }
     },
     "/installations/{id}/readings": {
       "get": {
         "summary": "Get analytical generation reading history",
         "description": "Historical readings with pagination envelope, date range filtering, and conditional GET ETag support",
-        "security": [{ "UserAuth": [] }],
+        "security": [
+          {
+            "UserAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           },
           {
             "name": "page",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "default": 1 }
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
           },
           {
             "name": "limit",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "default": 50, "maximum": 100 }
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100
+            }
           },
           {
             "name": "from",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "format": "date-time" },
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
             "description": "Start ISO date-time filter"
           },
           {
             "name": "to",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "format": "date-time" },
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
             "description": "End ISO date-time filter"
           },
           {
             "name": "sort",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "default": "timestamp" }
+            "schema": {
+              "type": "string",
+              "default": "timestamp"
+            }
           },
           {
             "name": "order",
             "in": "query",
             "required": false,
-            "schema": { "type": "string", "enum": ["asc", "desc"], "default": "desc" }
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            }
           },
           {
             "name": "If-None-Match",
             "in": "header",
             "required": false,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "ETag header for conditional GET"
           }
         ],
@@ -646,42 +1211,85 @@
           "200": {
             "description": "Paginated envelope response",
             "headers": {
-              "ETag": { "schema": { "type": "string" } },
-              "Cache-Control": { "schema": { "type": "string" } }
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             },
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ReadingsHistoryEnvelope" }
+                "schema": {
+                  "$ref": "#/components/schemas/ReadingsHistoryEnvelope"
+                }
               }
             }
           },
           "304": {
             "description": "Not Modified (ETag matched)",
             "headers": {
-              "ETag": { "schema": { "type": "string" } }
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             }
           },
-          "403": { "description": "Forbidden", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "Solar installation not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Solar installation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Telemetry Readings"
+        ]
       },
       "post": {
         "summary": "Ingest meter telemetry reading",
         "description": "Telemetry write endpoint requiring X-API-Key header authentication",
-        "security": [{ "ApiKeyAuth": [] }],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/CreateReadingPayload" }
+              "schema": {
+                "$ref": "#/components/schemas/CreateReadingPayload"
+              }
             }
           }
         },
@@ -689,22 +1297,101 @@
           "201": {
             "description": "Reading created successfully",
             "headers": {
-              "Location": { "schema": { "type": "string" } },
-              "ETag": { "schema": { "type": "string" } },
-              "Last-Modified": { "schema": { "type": "string" } }
+              "Location": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Last-Modified": {
+                "schema": {
+                  "type": "string"
+                }
+              }
             },
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/GenerationReading" }
+                "schema": {
+                  "$ref": "#/components/schemas/GenerationReading"
+                }
               }
             }
           },
-          "400": { "description": "Invalid reading payload fields", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "401": { "description": "X-API-Key header is required for device ingestion", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "403": { "description": "Provided API key does not match this installation", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } },
-          "404": { "description": "Solar installation not found", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
-        }
+          "400": {
+            "description": "Invalid reading payload fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "X-API-Key header is required for device ingestion",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Provided API key does not match this installation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Solar installation not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Telemetry Readings"
+        ]
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "User login and credential verification endpoints"
+    },
+    {
+      "name": "Provinces",
+      "description": "Provincial administrative hierarchy endpoints"
+    },
+    {
+      "name": "Districts",
+      "description": "District administrative hierarchy and aggregate summary endpoints"
+    },
+    {
+      "name": "Substations",
+      "description": "Grid Substation operational structure endpoints"
+    },
+    {
+      "name": "Solar Installations",
+      "description": "Solar installation management, updates, and soft deletion"
+    },
+    {
+      "name": "Telemetry Readings",
+      "description": "Real-time, historical, and write ingestion telemetry readings"
+    }
+  ]
 }
